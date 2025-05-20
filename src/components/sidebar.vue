@@ -10,15 +10,15 @@ const count = ref(0)
 
 <template>
   <div class="sidebar">
-    <router-link to="/home" class="title-link">
-      <h2 class="title">My App</h2>
+    <router-link to="/dashboard" class="title-link">
+      <h2 class="title">시스템 이름</h2>
     </router-link>
 
     <ul class="nav">
-      <li><router-link to="/home">Home</router-link></li>
       <li><router-link to="/dashboard">Dashboard</router-link></li>
-      <li><router-link to="/settings">Settings</router-link></li>
-      <li><router-link to="/help">Help</router-link></li>
+      <li><router-link to="/quality">품질 모니터링</router-link></li>
+      <li><router-link to="/maintenance">고장 분석</router-link></li>
+      <li><router-link to="/rawdata">데이터 샘플</router-link></li>
     </ul>
   </div>
 </template>
@@ -28,20 +28,19 @@ const count = ref(0)
 
 <style scoped>
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 200px;
   height: 100vh;
   background-color: #2c3e50;
   color: white;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .title {
   font-size: 24px;
   margin-bottom: 40px;
   text-align: left;
+  color: white;
 }
 
 .nav {
@@ -66,5 +65,6 @@ const count = ref(0)
 
 .nav a.router-link-exact-active {
   color: #42b983;
+  font-weight: bold;
 }
 </style>

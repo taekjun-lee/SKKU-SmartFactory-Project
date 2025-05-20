@@ -1,8 +1,9 @@
 <template>
-  <Sidebar />
-
-  <div style="margin-left: 200px; padding: 20px;">
-    <router-view />
+  <div class="layout">
+    <Sidebar />
+    <main class="main-content">
+      <router-view />
+    </main>
   </div>
 </template>
 
@@ -11,16 +12,17 @@ import Sidebar from './components/sidebar.vue'
 </script>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
 }
 </style>
