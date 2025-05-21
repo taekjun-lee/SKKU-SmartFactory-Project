@@ -1,32 +1,36 @@
 <template>
   <div class="dashboard">
-    <h1>샘플 데이터 Google docs API test</h1>
-    <p>데이터 수량이 많아지면 많아질수록 느리고 렉걸릴듯</p>
+    <h1>센서 데이터 불러오기 테스트</h1>
+    <p>CSV 용량이 커서 로딩 시간이 걸릴 수 있습니다</p>
 
-    <div class="table-container">
+    <div v-if="isLoading" class="loading">
+      <div class="spinner-circle"></div>
+      <p>데이터 로딩 중입니다...</p>
+    </div>
+
+    <div v-else class="table-container">
       <table class="styled-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>설비명</th>
-            <th>상태</th>
+            <th>Timestamp</th>
+            <th>Sensor_A</th>
+            <th>Sensor_B</th>
           </tr>
         </thead>
         <tbody>
           <tr
             v-for="item in paginatedData"
-            :key="item.ID"
-            :class="getStatusClass(item.Status)"
+            :key="item.Timestamp"
           >
-            <td>{{ item.ID }}</td>
-            <td>{{ item.Name }}</td>
-            <td>{{ item.Status }}</td>
+            <td>{{ item.Timestamp }}</td>
+            <td>{{ item.SensorA }}</td>
+            <td>{{ item.SensorB }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="pagination">
+    <div class="pagination" v-if="!isLoading">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
@@ -44,20 +48,32 @@ const itemsPerPage = 20
 function parseCSV(text) {
   const lines = text.trim().split('\n')
   const headers = lines[0].split(',')
+  const timestampIndex = headers.indexOf('Timestamp')
+  const sensoraIndex = headers.indexOf('Sensor_A')
+  const sensorbIndex = headers.indexOf('Sensor_B')
+
   return lines.slice(1).map(line => {
     const values = line.split(',')
-    const obj = {}
-    headers.forEach((header, i) => {
-      obj[header.trim()] = values[i]?.trim() ?? ''
-    })
-    return obj
+    return {
+      Timestamp: values[timestampIndex],
+      SensorA: values[sensoraIndex],
+      SensorB: values[sensorbIndex]
+    }
   })
 }
 
+const isLoading = ref(true)
 onMounted(async () => {
-  const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vR_IUp2JX2R5MKqF_In41vy0Tk-oaxwIvtMuYNTAgrOsuo7bf20wUrdL7qH-61abR6qx920hnOIVYkV/pub?output=csv")
-  const text = await response.text()
-  sensorData.value = parseCSV(text)
+  isLoading.value = true
+  try {
+    const response = await fetch("https://raw.githubusercontent.com/taekjun-lee/SKKU-SmartFactory-Data/refs/heads/main/TEST_DATA.csv")
+    const text = await response.text()
+    sensorData.value = parseCSV(text)
+  } catch (error) {
+    console.error("CSV 불러오기 실패:", error)
+  } finally {
+    isLoading.value = false
+  }
 })
 
 const totalPages = computed(() => Math.ceil(sensorData.value.length / itemsPerPage))
@@ -165,5 +181,27 @@ function getStatusClass(status) {
 
 .pagination span {
   font-weight: bold;
+}
+
+.loading {
+  margin-top: 40px;
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-circle {
+  width: 40px;
+  height: 40px;
+  border: 6px solid #ddd;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 10px;
 }
 </style>
