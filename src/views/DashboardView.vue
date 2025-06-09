@@ -35,7 +35,7 @@ const selectedSensor = ref('')
 <style scoped>
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 300px 1fr 1fr 1fr;
+  grid-template-columns: 300px 450px 450px 450px;
   grid-template-rows: auto 450px auto 180px 180px;
   gap: 6px;
 }
