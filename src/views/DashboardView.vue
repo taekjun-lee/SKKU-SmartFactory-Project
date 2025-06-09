@@ -1,21 +1,21 @@
 <template>
-  <div class="full-page">
-    <div class="row-title">품질 트렌드 요약</div>
-    <div class="row">
-      <ParameterInfo @sensor-selected="selectedSensor = $event" class="grid-item" />
-      <QualityChart :selectedSensor="selectedSensor" class="grid-item" />
+  <div class="dashboard-grid">
+    <div class="header">Parameter Chart</div>
+    <div class="parameter">
+      <ParameterInfo @sensor-selected="selectedSensor = $event"/>
     </div>
-
-    <div class="row-title">고장 이력 및 분석</div>
-    <div class="row">
-      <FailureHistory class="grid-item" />
-      <FailureAnalysis class="grid-item" />
+    <div class="graph">
+      <QualityChart :selectedSensor="selectedSensor"/>
     </div>
-
-    <div class="row-title">생각해봐야할듯</div>
-    <div class="row">
-      <Reserved1 class="grid-item" />
-      <Reserved2 class="grid-item" />
+    <div class="header">Data Analysis</div>
+    <div class="risk">
+      <riskanalysis/>
+    </div>
+    <div class="algorithm">
+      <algorithm/>
+    </div>
+    <div class="maint">
+      <maintanalysis/>
     </div>
   </div>
 </template>
@@ -24,51 +24,79 @@
 import { ref } from 'vue'
 import QualityChart from '../components/QualityChart.vue'
 import ParameterInfo from '../components/ParameterInfo.vue'
-import FailureHistory from '../components/FailureHistory.vue'
-import FailureAnalysis from '../components/FailureAnalysis.vue'
-import Reserved1 from '../components/Reserved1.vue'
-import Reserved2 from '../components/Reserved2.vue'
-
+import riskanalysis from '../components/riskanalysis.vue'
+import maintanalysis from '../components/maintanalysis.vue'
+import algorithm from '../components/algorithm.vue'
 const selectedSensor = ref('')
+</script>
+<script setup>
 </script>
 
 <style scoped>
-.full-page {
-  display: flex;
-  flex-direction: column;
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr 1fr 1fr;
+  grid-template-rows: auto 450px auto 180px 180px;
+  gap: 6px;
+}
+
+.dashboard-grid > div {
+  border: 1px solid #ccc; /* 셀 테두리 색상 */
   box-sizing: border-box;
 }
 
-.row-title {
-  font-weight: bold;
-  font-size: 18px;
+.header {
+  grid-column: 1 / 5;
   background-color: #2c3e50;
   color: white;
-  padding: 10px 16px;
+  padding: 6px;
+  font-weight: bold;
+  text-align: center;
   border-radius: 6px;
 }
 
-.row-title > *:not(:first-child) {
-  margin-top: 16px;
-}
-
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 12px;
-  margin-bottom: 12px;
-}
-
-.grid-item {
+.parameter {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
   background-color: white;
-  padding: 20px;
+  padding: 6px;
   border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  min-width: 500px;
-  min-height: 200px;
+}
+
+.graph {
+  grid-column: 2 / 5;
+  grid-row: 2 / 3;
+  background-color: white;
+  padding: 6px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.risk {
+  grid-column: 1 / 4;
+  grid-row: 4 / 5;
+  background-color: white;
+  padding: 6px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.maint {
+  grid-column: 1 / 4;
+  grid-row: 5 / 6;
+  background-color: white;
+  padding: 6px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.algorithm {
+  grid-column: 4 / 4;
+  grid-row: 4 / 6;
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
 }
 </style>

@@ -26,7 +26,18 @@ function selectSensor(header) {
 </script>
 
 <template>
-  <div class="header-container">
+  <!-- 날짜 필터
+  <div class="filter">
+    <label>시작:</label>
+    <input type="datetime-local" v-model="startTime" />
+    <label>종료:</label>
+    <input type="datetime-local" v-model="endTime" />
+    <button @click="applyFilter">필터 적용</button>
+  </div>
+  -->
+
+  <div class="header">Parameter 목록</div>
+  <div class="parameterlist">
     <ul v-if="headers.length">
       <li
         v-for="(header, index) in headers"
@@ -43,13 +54,14 @@ function selectSensor(header) {
 </template>
 
 <style scoped>
-.header-container {
-  padding: 20px;
-  max-height: 400px;
+.header {
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+}
+
+.parameterlist {
   overflow-y: auto;
-  border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #f9f9f9;
 }
 
 ul {
