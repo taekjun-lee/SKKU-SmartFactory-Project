@@ -6,7 +6,7 @@ import DatasetView from '../views/DatasetView.vue'
 import CodeView from '../views/CodeView.vue'
 
 const routes = [
-  { path: '/', redirect: '/dashboard' },
+  { path: '/', redirect: '/contents' },
   { path: '/dashboard', component: DashboardView },
   { path: '/algorithm', component: AlgorithmView },
   { path: '/contents', component: ContentsView },
