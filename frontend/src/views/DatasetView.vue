@@ -14,16 +14,51 @@
         :class="{ active: activeView === 'table' }"
         @click="showTable"
       >
-        🧾테이블 조회
+        🧾데이터 조회
       </div>
       <div class="fileview" @click="downloadFile">
-        📁다운로드
+        💾다운로드
       </div>
     </div>
 
     <!-- 설명 화면 -->
     <div v-if="activeView === 'explain'" class="explain-container">
-      <p>이 데이터는 XX에서 수집되었으며, 전처리 과정을 거쳐 활용 가능한 형태로 가공되었습니다.</p>
+      <h2>데이터 출처</h2>
+      <p>• 분석 데이터는 <a href="https://www.kaggle.com/datasets/nphantawee/pump-sensor-data/data" target="_blank">Kaggle</a>에서 취득하여 전처리 과정을 거쳐 활용 가능한 형태로 가공</p>
+      <p>• 데이터 샘플 및 다운로드는 상단 메뉴 참고</p>
+      <br>
+      <h2>데이터 전처리</h2>
+      <div class="toggles">
+        <div class="toggle-item" @click="toggleDetail(0)">
+          <p>• Data가 Null이거나 데이터 변동성이 없는 Column 제외 
+            <a>{{ expanded[0] ? '▲' : '▼' }}</a>
+          </p>
+          <div v-if="expanded[0]" class="detail">
+            제외 샘플 데이터 보여줄 것
+          </div>
+        </div>
+
+        <div class="toggle-item" @click="toggleDetail(1)">
+          <p>• 특정 Sensor 데이터의 경우 중복/유사한 트렌드를 가지므로 일부 Column 제외 
+            <a>{{ expanded[1] ? '▲' : '▼' }}</a>
+          </p>
+          <div v-if="expanded[1]" class="detail">
+            제외 샘플 데이터 보여줄 것
+          </div>
+        </div>
+
+        <div class="toggle-item" @click="toggleDetail(2)">
+          <p>• 훈련 및 검증의 경우 80/20로 데이터를 분할하여 진행 
+            <a>{{ expanded[2] ? '▲' : '▼' }}</a>
+          </p>
+          <div v-if="expanded[2]" class="detail">
+            샘플 데이터 보여줄게 있으면 보여주기
+          </div>
+        </div>
+      </div>
+      <br>
+      <h2>데이터 분석</h2>
+      <p>• ㅁㄴㅇ</p>
     </div>
 
     <!-- 로딩 -->
@@ -69,20 +104,30 @@ const headers = ref([])
 const paginatedData = ref([])
 const isLoading = ref(false)
 const activeView = ref('explain')
+const expanded = ref([false, false, false])
+
+function toggleDetail(index) {
+  expanded.value[index] = !expanded.value[index]
+}
 
 function showExplaination() {
   activeView.value = 'explain'
+}
+
+function downloadFile() {
+  const link = document.createElement('a')
+  link.href = `${import.meta.env.BASE_URL}sensor.csv`
+  link.download = 'sensor.csv'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 async function fetchPage(page) {
   isLoading.value = true
   try {
     const res = await fetch(
-      `https://skku-smartfactory-project.onrender.com/api/raw-data?page=${page}&size=${itemsPerPage}`,
-      {
-        method: 'GET',
-        mode: 'cors'
-      }
+      `https://skku-smartfactory-project.onrender.com/api/raw-data?page=${page}&size=${itemsPerPage}`
     )
     const result = await res.json()
 
@@ -137,7 +182,7 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
 .styled-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -156,20 +201,6 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
   text-overflow: ellipsis;
   max-width: 80px;
   height: 16px;
-}
-
-.styled-table td::after {
-  content: attr(title);
-  display: none;
-  position: absolute;
-  background-color: white;
-  color: black;
-  border: 1px solid #ccc;
-  padding: 4px;
-  font-size: 12px;
-  white-space: pre-wrap;
-  max-width: 400px;
-  z-index: 2;
 }
 
 .styled-table tr:nth-child(even) {
@@ -195,11 +226,19 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
 }
 
 .pagination {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
   gap: 10px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .pagination button {
@@ -252,7 +291,7 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
   margin-left: 10px;
   padding: 6px 10px;
   cursor: pointer;
-  color: blue;
+  color: black;
 }
 
 .header div:hover {
@@ -260,14 +299,14 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
 }
 
 .header .active {
-  background-color: #d6eaff; /* 활성화 배경 */
-  font-weight: bold;
+  background-color: #d6eaff;
+  font-weight: 580;
 }
 
 .explain-container {
   padding: 10px;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.4;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   margin-top: 10px;
@@ -277,7 +316,6 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
   display: flex;
   margin-left: 10px;
   cursor: pointer;
-  color: blue;
 }
 
 .fileview:hover, .tableview:hover, .explainationview:hover {
@@ -289,5 +327,31 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
   margin-top: 6px;
   transition: max-height 0.4s ease-in-out;
   max-height: 9999px;
+}
+
+.toggle-item {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.toggle-item p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-item a {
+  font-size: 14px;
+  margin-left: 8px;
+  color: #0056b3;
+}
+
+.detail {
+  padding: 6px 12px;
+  background-color: #f2f2f2;
+  border-left: 4px solid #007acc;
+  font-size: 14px;
+  margin-top: 4px;
+  transition: all 0.3s ease-in-out;
 }
 </style>
