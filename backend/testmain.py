@@ -18,8 +18,7 @@ app.add_middleware(
 
 @app.get("/api/headers")
 def get_csv_headers():
-    base_dir = Path(__file__).resolve().parents[1]
-    csv_path = base_dir / "frontend" / "public" / "sensor.csv"
+    csv_path = Path(__file__).resolve().parent / "sensor.csv"
     if not os.path.exists(csv_path):
         return {"error": "CSV file not found"}
     
@@ -34,8 +33,7 @@ def get_sensor_data(
     start: Optional[str] = Query(None),
     end: Optional[str] = Query(None)
 ):
-    base_dir = Path(__file__).resolve().parents[1]
-    csv_path = base_dir / "frontend" / "public" / "sensor.csv"
+    csv_path = Path(__file__).resolve().parent / "sensor.csv"  
     if not os.path.exists(csv_path):
         return {"error": "CSV file not found"}
 
@@ -84,8 +82,7 @@ def get_raw_data(
     page: int = Query(1, gt=0),
     size: int = Query(20, gt=0)
 ):
-    base_dir = Path(__file__).resolve().parents[1]
-    csv_path = base_dir / "frontend" / "public" / "sensor.csv"
+    csv_path = Path(__file__).resolve().parent / "sensor.csv"  
     if not os.path.exists(csv_path):
         return {"error": "CSV file not found"}
 
