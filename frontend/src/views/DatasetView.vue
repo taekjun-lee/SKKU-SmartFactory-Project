@@ -78,7 +78,7 @@ async function fetchPage(page) {
   isLoading.value = true
   try {
     const res = await fetch(
-      `http://localhost:8000/api/raw-data?page=${page}&size=${itemsPerPage}`
+      `https://skku-smartfactory-project.onrender.com/api/raw-data?page=${page}&size=${itemsPerPage}`
     )
     const result = await res.json()
 

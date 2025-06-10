@@ -77,7 +77,7 @@ watch(() => props.selectedSensor, async (newSensor) => {
   const start = new Date(now.setDate(now.getDate() - 14)).toISOString()
 
   const response = await fetch(
-    `http://localhost:8000/api/sensor-data?sensor=${encodeURIComponent(newSensor)}&start=${start}&end=${end}`
+    `https://skku-smartfactory-project.onrender.com/api/sensor-data?sensor=${encodeURIComponent(newSensor)}&start=${start}&end=${end}`
   )
   const result = await response.json()
   if (!result.timestamps || result.timestamps.length === 0) {

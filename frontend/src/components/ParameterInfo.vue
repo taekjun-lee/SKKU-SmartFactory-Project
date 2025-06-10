@@ -8,7 +8,7 @@ const selectedHeader = ref('')
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:8000/api/headers')
+    const response = await fetch('https://skku-smartfactory-project.onrender.com/api/headers')
     const result = await response.json()
     if (result.headers) {
       headers.value = result.headers
