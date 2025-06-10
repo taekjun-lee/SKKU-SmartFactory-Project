@@ -21,7 +21,7 @@ app.add_middleware(
 
 def get_csv_path() -> str:
     base_dir = os.path.dirname(os.path.dirname(__file__))
-    path = os.path.join(base_dir, "frontend", "public", "sensor.csv")
+    path = os.path.join(base_dir, "backend", "sensor.csv")
     if not os.path.exists(path):
         logger.error(f"CSV file not found at path: {path}")
         raise HTTPException(status_code=404, detail="CSV file not found")
