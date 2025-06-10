@@ -41,7 +41,7 @@ const selectedSensor = ref('')
 }
 
 .dashboard-grid > div {
-  border: 1px solid #ccc; /* 셀 테두리 색상 */
+  border: 1px solid #ccc;
   box-sizing: border-box;
 }
 
@@ -51,8 +51,9 @@ const selectedSensor = ref('')
   color: white;
   padding: 6px;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
   border-radius: 6px;
+  font-size: 20px;
 }
 
 .parameter {
